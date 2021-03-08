@@ -24,13 +24,7 @@ public class logConsumer {
 //        props.put("auto.offset.reset", "earliest");
         props.put("enable.auto.commit", "false");
     }
-    public void consume(String topic){
-        KafkaConsumer<String, String> consumer = KafkaConsumer.create(vertx, props);
 
-        consumer.handler(record -> System.out.println("Processing key=" + record.key() + ", value=" + record.value() +
-                ", partition=" + record.partition() + ", offset=" + record.offset()));
-        consumer.subscribe(topic);
-    }
     public void consumeAndSend2Cassandra(String topic){
         KafkaConsumer<String, String> consumer = KafkaConsumer.create(vertx, props);
         // set up Cassandra
@@ -100,6 +94,5 @@ public class logConsumer {
     public static void main(String[] args) {
         logConsumer c = new logConsumer("localhost:9092", "kafkatestgroup");
         c.consumeAndSend2Cassandra("testTopic");
-//        c.consume("testTopic");
     }
 }
