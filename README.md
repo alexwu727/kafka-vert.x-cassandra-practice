@@ -1,4 +1,8 @@
 # kafka-vert.x-cassandra
+## Install 
+* [Zookeeper](https://medium.com/@shaaslam/installing-apache-zookeeper-on-windows-45eda303e835)
+* [Kafka](https://medium.com/@shaaslam/installing-apache-kafka-on-windows-495f6f2fd3c8)
+* [Cassandra](https://phoenixnap.com/kb/install-cassandra-on-windows)
 ## Kafka
 * Start Zookeeper  
 Zookeeper和Kafka溝通是走2181  
