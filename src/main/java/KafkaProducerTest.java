@@ -5,7 +5,7 @@ import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import java.util.HashMap;
 import java.util.Map;
 
-public class kafkaProducer {
+public class KafkaProducerTest {
     public static void main(String[] args) {
         Map<String, String> config = new HashMap<>();
         config.put("bootstrap.servers", "localhost:9092");
@@ -15,9 +15,8 @@ public class kafkaProducer {
 
 // use producer for interacting with Apache Kafka
         Vertx vertx = Vertx.vertx();
-        KafkaProducer<String, String> producer = KafkaProducer.create(vertx, config);
+        io.vertx.kafka.client.producer.KafkaProducer<String, String> producer = io.vertx.kafka.client.producer.KafkaProducer.create(vertx, config);
         for (int i = 0; i < 5; i++) {
-
             // only topic and message value are specified, round robin on destination partitions
             KafkaProducerRecord<String, String> record =
                     KafkaProducerRecord.create("kafkaTestTopic", "message_" + i);

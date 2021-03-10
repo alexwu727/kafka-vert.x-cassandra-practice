@@ -1,12 +1,11 @@
 import io.vertx.core.Vertx;
-import io.vertx.kafka.client.consumer.KafkaConsumer;
 
 import java.util.Properties;
 
-public class kafkaConsumer {
+public class KafkaConsumerTest {
     private final Properties props;
     Vertx vertx = Vertx.vertx();
-    public kafkaConsumer(String brokers, String groupId) {
+    public KafkaConsumerTest(String brokers, String groupId) {
         props = new Properties();
         props.put("bootstrap.servers", brokers);
         props.put("group.id", groupId);
@@ -16,7 +15,7 @@ public class kafkaConsumer {
         props.put("enable.auto.commit", "false");
     }
     public void consume(String topic){
-        KafkaConsumer<String, String> consumer = KafkaConsumer.create(vertx, props);
+        io.vertx.kafka.client.consumer.KafkaConsumer<String, String> consumer = io.vertx.kafka.client.consumer.KafkaConsumer.create(vertx, props);
 
         consumer.handler(record -> System.out.println("Processing key=" + record.key() + ", value=" + record.value() +
                 ", partition=" + record.partition() + ", offset=" + record.offset()));
@@ -24,7 +23,7 @@ public class kafkaConsumer {
     }
 
     public static void main(String[] args) {
-        kafkaConsumer c = new kafkaConsumer("localhost:9092", "kafkatestgroup");
+        KafkaConsumerTest c = new KafkaConsumerTest("localhost:9092", "kafkatestgroup");
         c.consume("kafkaTestTopic");
     }
 }

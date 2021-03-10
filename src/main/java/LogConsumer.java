@@ -2,6 +2,7 @@ import com.datastax.oss.driver.api.core.cql.Row;
 import io.vertx.cassandra.CassandraClient;
 import io.vertx.cassandra.CassandraClientOptions;
 import io.vertx.cassandra.ResultSet;
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
@@ -12,10 +13,10 @@ import org.json.JSONObject;
 import java.util.Objects;
 import java.util.Properties;
 
-public class logConsumer {
+public class LogConsumer {
     private final Properties props;
     Vertx vertx = Vertx.vertx();
-    public logConsumer(String brokers, String groupId) {
+    public LogConsumer(String brokers, String groupId) {
         props = new Properties();
         props.put("bootstrap.servers", brokers);
         props.put("group.id", groupId);
@@ -33,15 +34,17 @@ public class logConsumer {
                 .setKeyspace("test_keyspace");
         options.dataStaxClusterBuilder().withLocalDatacenter("datacenter1");
         CassandraClient client = CassandraClient.create(vertx, options);
-
         // consume
         consumer.handler(record -> {
-            // get table
+            // log data
+            String logData = record.value();
+
+            // table
             // TODO
             String table = "test_table";
 
-            // get id
-            String logData = record.value();
+            // id
+            // TODO
             String id = null;
             try {
                 JSONObject logDataJson = new JSONObject(logData);
@@ -50,6 +53,7 @@ public class logConsumer {
                 System.out.println(err);
             }
             String finalId = id;
+
             // If the table doesn't exist, create one.
             checkTable(client, table).onComplete(voidAsyncResult -> {
                if (voidAsyncResult.succeeded()){
@@ -92,7 +96,7 @@ public class logConsumer {
         return promise.future();
     }
     public static void main(String[] args) {
-        logConsumer c = new logConsumer("localhost:9092", "kafkatestgroup");
+        LogConsumer c = new LogConsumer("localhost:9092", "kafkatestgroup");
         c.consumeAndSend2Cassandra("testTopic");
     }
 }
